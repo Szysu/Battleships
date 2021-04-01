@@ -1,6 +1,21 @@
-﻿namespace BattleshipsTests
+﻿using Xunit;
+
+namespace BattleshipsTests
 {
-    class GameTests
+    public class GameTests
     {
+        private readonly Game _game;
+
+        public GameTests()
+        {
+            _game = new Game();
+        }
+
+        [Fact]
+        public void Constructor_NewInstance()
+        {
+            var game = new Game();
+            Assert.NotNull(game);
+        }
     }
 }
