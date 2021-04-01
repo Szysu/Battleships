@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Battleships;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace BattleshipsTests
         }
 
         [Fact]
-        public void Shoot_ShipLocationString_ReturnsTrue()
+        public void Shoot_ShipLocation_ReturnsTrue()
         {
             var ship = _game.Ships[0];
             var shipLocation = ship.Locations[0];
@@ -30,7 +31,7 @@ namespace BattleshipsTests
         }
 
         [Fact]
-        public void Shoot_EmptyLocationString_ReturnsFalse()
+        public void Shoot_EmptyLocation_ReturnsFalse()
         {
             string randomLocation;
 
@@ -44,12 +45,22 @@ namespace BattleshipsTests
         }
 
         [Theory]
+        [InlineData("")]
+        [InlineData(" ​")]
+        [InlineData("A")]
+        [InlineData("1")]
         [InlineData("A0")]
-        [InlineData("A11")]
         [InlineData("K1")]
+        [InlineData("A11")]
         [InlineData("K11")]
-        [InlineData("TEST0")]
-        public void Shoot_InvalidLocationString_ThrowsArgumentOutOfRangeException(string location)
+        [InlineData("6549")] // 65 = 'A' & 49 = '1' in ASCII
+        [InlineData("652")]
+        [InlineData("A49")]
+        [InlineData("A-1")]
+        [InlineData("A-11")]
+        [InlineData("K-1")]
+        [InlineData("K-11")]
+        public void Shoot_InvalidLocation_ThrowsArgumentOutOfRangeException(string location)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _game.Shoot(location));
         }

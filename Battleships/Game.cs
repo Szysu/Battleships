@@ -6,17 +6,11 @@ namespace Battleships
 {
     public class Game
     {
-        #region Private Fields
-
         private const int BattleshipCount = 1;
 
         private const int DestroyerCount = 2;
 
         private readonly List<string> _usedLocations;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public Game()
         {
@@ -26,25 +20,13 @@ namespace Battleships
             CreateDestroyers();
         }
 
-        #endregion Public Constructors
-
-        #region Public Enums
-
         public enum Direction
         {
             Vertical,
             Horizontal
         }
 
-        #endregion Public Enums
-
-        #region Public Properties
-
         public List<Ship> Ships { get; }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         public bool Shoot(string location)
         {
@@ -71,17 +53,13 @@ namespace Battleships
         public string GetRandomLocation(int xOffset = 0, int yOffset = 0)
         {
             var random = new Random();
-            var randomChar = (char)random.Next(65, 75 - xOffset);
+            var randomChar = (char) random.Next(65, 75 - xOffset);
             var randomNumber = random.Next(1, 11 - yOffset);
             return $"{randomChar}{randomNumber}";
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
         private void CreateBattleships()
-                            => CreateShips(5, BattleshipCount);
+            => CreateShips(5, BattleshipCount);
 
         private void CreateDestroyers()
             => CreateShips(4, DestroyerCount);
@@ -97,7 +75,7 @@ namespace Battleships
                     locations = GetRandomShipLocation(size);
                 } while (Ships.Any(s => locations.Any(location => s.Locations.Contains(location))));
 
-                var ship = new Ship { DamagedLocations = new List<string>(), Locations = locations };
+                var ship = new Ship {DamagedLocations = new List<string>(), Locations = locations};
                 Ships.Add(ship);
             }
         }
@@ -105,7 +83,7 @@ namespace Battleships
         private List<string> GetRandomShipLocation(int size)
         {
             var random = new Random();
-            var direction = (Direction)random.Next(0, 2);
+            var direction = (Direction) random.Next(0, 2);
             var randomLocation = new List<string>();
             var startPosition = direction == Direction.Vertical ? GetRandomLocation(size) : GetRandomLocation(0, size);
             var number = int.Parse(startPosition[1..]);
@@ -113,7 +91,7 @@ namespace Battleships
             for (var i = 0; i < size; i++)
                 randomLocation.Add(
                     direction == Direction.Vertical ?
-                        $"{(char)(startPosition[0] + i)}{number}" :
+                        $"{(char) (startPosition[0] + i)}{number}" :
                         $"{startPosition[0]}{number + i}"
                 );
 
@@ -133,7 +111,5 @@ namespace Battleships
             // Check number part
             return int.TryParse(location[1..], out var numIndex) && numIndex >= 1 && numIndex <= 10;
         }
-
-        #endregion Private Methods
     }
 }
