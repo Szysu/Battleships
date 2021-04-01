@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Battleships;
+using Xunit;
 
 namespace BattleshipsTests
 {
