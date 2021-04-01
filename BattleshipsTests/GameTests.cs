@@ -1,0 +1,6 @@
+﻿namespace BattleshipsTests
+{
+    class GameTests
+    {
+    }
+}
