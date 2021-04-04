@@ -1,115 +1,167 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Battleships
 {
+    /// <summary>
+    ///     The main class of the game.
+    /// </summary>
     public class Game
     {
-        private const int BattleshipCount = 1;
+        private readonly List<Location> _missedShotLocations;
 
-        private const int DestroyerCount = 2;
-
-        private readonly List<string> _usedLocations;
-
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Game"/> class.
+        /// </summary>
         public Game()
         {
             Ships = new List<Ship>();
-            _usedLocations = new List<string>();
-            CreateBattleships();
-            CreateDestroyers();
+            _missedShotLocations = new List<Location>();
+            CreateShips(5, 1);
+            CreateShips(4, 2);
         }
 
-        public enum Direction
-        {
-            Vertical,
-            Horizontal
-        }
-
+        /// <summary>
+        ///     A list of created ships.
+        /// </summary>
         public List<Ship> Ships { get; }
 
-        public bool Shoot(string location)
+        /// <summary>
+        ///     The number of battleships to sink.
+        /// </summary>
+        public int BattleshipsToSink => Ships.Count(s => s.Locations.Count == 5 && !s.IsSunk);
+
+        /// <summary>
+        ///     The number of destroyers to sink.
+        /// </summary>
+        public int DestroyersToSink => Ships.Count(s => s.Locations.Count == 4 && !s.IsSunk);
+
+        /// <summary>
+        ///     Indicates whether all ships have been sunk.
+        /// </summary>
+        public bool IsEnded => Ships.All(s => s.IsSunk);
+
+        /// <summary>
+        ///     Compares ships locations with the specified <paramref name="location"/>.
+        /// </summary>
+        /// <param name="location">A location to compare.</param>
+        /// <returns>
+        ///     <see langword="true"/> if the specified <paramref name="location"/> is a ship
+        ///     location, otherwise <see langword="false"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="location"/> was previously shot.
+        /// </exception>
+        public bool Shoot(Location location)
         {
-            location = string.Concat(location.Where(c => !char.IsWhiteSpace(c)))
-                .ToUpper();
+            if (_missedShotLocations.Contains(location))
+                throw new ArgumentException("Location was previously shot.", nameof(location));
 
-            if (!IsValidLocation(location))
-                throw new ArgumentOutOfRangeException(location);
+            if (TryGetShipLocationCondition(location, out var ship, out var condition))
+            {
+                if (condition)
+                    throw new ArgumentException("Location was previously shot.", nameof(location));
 
-            if (_usedLocations.Contains(location))
-                throw new ArgumentException($"Location '{location}' was previously used.");
+                ship.Locations[location] = true;
+                return true;
+            }
 
-            _usedLocations.Add(location);
-
-            var ship = Ships.SingleOrDefault(s => s.Locations.Contains(location));
-
-            if (ship == null)
-                return false;
-
-            ship.DamagedLocations.Add(location);
-            return true;
+            _missedShotLocations.Add(location);
+            return false;
         }
 
-        public string GetRandomLocation(int xOffset = 0, int yOffset = 0)
+        /// <summary>
+        ///     Returns a symbol representation of the specified <paramref name="location"/>.
+        /// </summary>
+        /// <param name="location">The location of the symbol.</param>
+        /// <returns>The symbol of the location.</returns>
+        public char GetLocationSymbol(Location location)
         {
-            var random = new Random();
-            var randomChar = (char) random.Next(65, 75 - xOffset);
-            var randomNumber = random.Next(1, 11 - yOffset);
-            return $"{randomChar}{randomNumber}";
+            var symbol = '#';
+
+            if (_missedShotLocations.Contains(location))
+                symbol = 'O';
+
+            if (TryGetShipLocationCondition(location, out _, out var condition) && condition)
+                symbol = 'X';
+
+            return symbol;
         }
 
-        private void CreateBattleships()
-            => CreateShips(5, BattleshipCount);
+        /// <summary>
+        ///     Returns a string representing the game's playground.
+        /// </summary>
+        /// <returns>A string representing the game's playground.</returns>
+        public override string ToString()
+        {
+            var str = new StringBuilder();
+            str.AppendLine("  1 2 3 4 5 6 7 8 9 10");
 
-        private void CreateDestroyers()
-            => CreateShips(4, DestroyerCount);
+            for (var i = 'A'; i <= 'J'; i++)
+            {
+                str.Append(i);
+
+                for (var j = 1; j <= 10; j++)
+                {
+                    var currentLocation = new Location(i, j);
+                    str.Append($" {GetLocationSymbol(currentLocation)}");
+                }
+
+                str.AppendLine();
+            }
+
+            return str.ToString();
+        }
 
         private void CreateShips(int size, int count)
         {
             for (var i = count; i > 0; i--)
             {
-                List<string> locations;
+                List<Location> locations;
 
                 do
                 {
                     locations = GetRandomShipLocation(size);
-                } while (Ships.Any(s => locations.Any(location => s.Locations.Contains(location))));
+                } while (locations.Any(l => TryGetShipLocationCondition(l, out _, out _)));
 
-                var ship = new Ship {DamagedLocations = new List<string>(), Locations = locations};
+                var ship = new Ship(locations);
                 Ships.Add(ship);
             }
         }
 
-        private List<string> GetRandomShipLocation(int size)
+        private bool TryGetShipLocationCondition(Location location, out Ship ship, out bool condition)
         {
-            var random = new Random();
-            var direction = (Direction) random.Next(0, 2);
-            var randomLocation = new List<string>();
-            var startPosition = direction == Direction.Vertical ? GetRandomLocation(size) : GetRandomLocation(0, size);
-            var number = int.Parse(startPosition[1..]);
+            ship = default;
+            condition = default;
 
-            for (var i = 0; i < size; i++)
-                randomLocation.Add(
-                    direction == Direction.Vertical ?
-                        $"{(char) (startPosition[0] + i)}{number}" :
-                        $"{startPosition[0]}{number + i}"
-                );
+            foreach (var s in Ships)
+            {
+                if (!s.Locations.TryGetValue(location, out var value))
+                    continue;
 
-            return randomLocation;
+                ship = s;
+                condition = value;
+            }
+
+            return ship != null;
         }
 
-        private bool IsValidLocation(string location)
+        private List<Location> GetRandomShipLocation(int size)
         {
-            // Check length
-            if (location.Length < 2 || location.Length > 3)
-                return false;
+            var locations = new List<Location>();
+            var isVertical = new Random().Next(0, 2) == 0;
+            var firstLocation = isVertical ? Location.Random(size) : Location.Random(0, size);
 
-            // Check char part
-            if (location[0] < 65 || location[0] > 74)
-                return false;
+            for (var i = 0; i < size; i++)
+                locations.Add(
+                    isVertical ?
+                        new Location((char)(firstLocation.Char + i), firstLocation.Number) :
+                        new Location(firstLocation.Char, firstLocation.Number + i)
+                );
 
-            // Check number part
-            return int.TryParse(location[1..], out var numIndex) && numIndex >= 1 && numIndex <= 10;
+            return locations;
         }
     }
 }
