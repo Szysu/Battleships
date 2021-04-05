@@ -67,7 +67,7 @@ namespace BattleshipsTests
         [Fact]
         public void Random_ValidValues_ReturnsRandomLocation()
         {
-            Assert.IsType<Location>(Location.Random());
+            Assert.IsType<Location>(Location.Random(0, 0));
         }
 
         [Theory]

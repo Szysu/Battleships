@@ -57,12 +57,16 @@ namespace Battleships
         public bool Shoot(Location location)
         {
             if (_missedShotLocations.Contains(location))
+            {
                 throw new ArgumentException("Location was previously shot.", nameof(location));
+            }
 
             if (TryGetShipLocationCondition(location, out var ship, out var condition))
             {
                 if (condition)
+                {
                     throw new ArgumentException("Location was previously shot.", nameof(location));
+                }
 
                 ship.Locations[location] = true;
                 return true;
@@ -82,10 +86,14 @@ namespace Battleships
             var symbol = '#';
 
             if (_missedShotLocations.Contains(location))
+            {
                 symbol = 'O';
+            }
 
             if (TryGetShipLocationCondition(location, out _, out var condition) && condition)
+            {
                 symbol = 'X';
+            }
 
             return symbol;
         }
@@ -139,7 +147,9 @@ namespace Battleships
             foreach (var s in Ships)
             {
                 if (!s.Locations.TryGetValue(location, out var value))
+                {
                     continue;
+                }
 
                 ship = s;
                 condition = value;
@@ -152,14 +162,16 @@ namespace Battleships
         {
             var locations = new List<Location>();
             var isVertical = new Random().Next(0, 2) == 0;
-            var firstLocation = isVertical ? Location.Random(size) : Location.Random(0, size);
+            var firstLocation = isVertical ? Location.Random(size, 0) : Location.Random(0, size);
 
             for (var i = 0; i < size; i++)
+            {
                 locations.Add(
                     isVertical ?
                         new Location((char)(firstLocation.Char + i), firstLocation.Number) :
                         new Location(firstLocation.Char, firstLocation.Number + i)
                 );
+            }
 
             return locations;
         }

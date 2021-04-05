@@ -19,12 +19,16 @@ namespace Battleships
         public Ship(ICollection<Location> locations)
         {
             if (locations == null || !locations.Any())
+            {
                 throw new ArgumentNullException(nameof(locations));
+            }
 
             Locations = new Dictionary<Location, bool>();
 
             foreach (var location in locations)
+            {
                 Locations.Add(location, false);
+            }
         }
 
         /// <summary>

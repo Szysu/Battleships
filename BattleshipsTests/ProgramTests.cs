@@ -44,7 +44,9 @@ namespace BattleshipsTests
 
             for (var i = 'A'; i <= 'J'; i++)
                 for (var j = 1; j <= 10; j++)
+                {
                     allLocations.AppendLine($"{i}{j}");
+                }
 
             return allLocations.ToString();
         }

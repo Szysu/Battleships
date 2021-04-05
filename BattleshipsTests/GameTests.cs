@@ -117,7 +117,7 @@ namespace BattleshipsTests
             // Checks if any location in any ship is the same as a randomly generated location.
             do
             {
-                emptyLocation = Location.Random();
+                emptyLocation = Location.Random(0, 0);
             } while (_game.Ships.Any(ship => ship.Locations.ContainsKey(emptyLocation)));
 
             return emptyLocation;

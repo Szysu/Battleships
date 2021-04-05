@@ -18,10 +18,14 @@ namespace Battleships
         public Location(char charIndex, int numIndex)
         {
             if (charIndex < 'A' || charIndex > 'J')
+            {
                 throw new ArgumentOutOfRangeException(nameof(charIndex));
+            }
 
             if (numIndex < 1 || numIndex > 10)
+            {
                 throw new ArgumentOutOfRangeException(nameof(numIndex));
+            }
 
             Char = charIndex;
             Number = numIndex;
@@ -64,7 +68,7 @@ namespace Battleships
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="xOffset"/> or <paramref name="yOffset"/> is invalid.
         /// </exception>
-        public static Location Random(int xOffset = 0, int yOffset = 0)
+        public static Location Random(int xOffset, int yOffset)
         {
             var random = new Random();
             var randomChar = (char)random.Next('A', 'K' - xOffset);
@@ -87,7 +91,9 @@ namespace Battleships
             result = default;
 
             if (string.IsNullOrWhiteSpace(s))
+            {
                 return false;
+            }
 
             try
             {
