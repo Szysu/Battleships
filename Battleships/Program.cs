@@ -46,7 +46,7 @@ namespace Battleships
 
         private static void WriteShotLocationRequest()
         {
-            Console.Write("Enter the shot's location: ");
+            Console.Write("Location to shot: ");
             var input = Console.ReadLine();
 
             if (!Location.TryParse(input, out var location))
