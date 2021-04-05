@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Battleships
 {
-    public class Program
+    public static class Program
     {
         private static Game _game;
 
