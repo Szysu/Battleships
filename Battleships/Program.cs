@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 
 namespace Battleships
@@ -21,17 +22,18 @@ namespace Battleships
         public static void StartGame()
         {
             _game = new Game();
-
             do
             {
                 WriteShipsToDestroy();
                 Console.WriteLine(_game.ToString());
                 WriteShotLocationRequest();
-                var ise = Console.IsOutputRedirected;
-                if (!Console.IsOutputRedirected)
+                Thread.Sleep(1000);
+                try
                 {
-                    Thread.Sleep(1000);
                     Console.Clear();
+                }
+                catch (IOException)
+                {
                 }
             } while (!_game.IsEnded);
 
