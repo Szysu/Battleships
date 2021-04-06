@@ -11,17 +11,6 @@ namespace BattleshipsTests
         [Fact]
         public void Main_CorrectlyRunsProgram()
         {
-            var allLocations = GetAllLocations();
-
-            var input = new StringReader(allLocations);
-            Console.SetIn(input);
-
-            Program.Main(Array.Empty<string>());
-        }
-
-        [Fact]
-        public void StartGame_CorrectlyStartsGame()
-        {
             // 'G11' and 'A1' added to check the detection of duplicate shots and invalid inputs.
             var allLocations = string.Format("G11{0}A1{0}{1}", Environment.NewLine, GetAllLocations());
 
@@ -31,7 +20,7 @@ namespace BattleshipsTests
             var input = new StringReader(allLocations);
             Console.SetIn(input);
 
-            Program.StartGame();
+            Program.Main(Array.Empty<string>());
 
             Assert.Contains("The entered location is invalid.", output.ToString());
             Assert.Contains("The entered location has been previously shot!", output.ToString());
