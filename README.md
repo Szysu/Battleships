@@ -1,0 +1,2 @@
+# Battleships
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6c8f4fa9761a45a38fdd3c9bf5fdc200)](https://app.codacy.com/gh/Szysu/Battleships?utm_source=github.com&utm_medium=referral&utm_content=Szysu/Battleships&utm_campaign=Badge_Grade_Settings)
