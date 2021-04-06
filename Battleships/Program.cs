@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Battleships
@@ -24,14 +24,7 @@ namespace Battleships
                 WriteShipsToDestroy();
                 Console.WriteLine(_game.ToString());
                 WriteShotLocationRequest();
-                Thread.Sleep(1000);
-                try
-                {
-                    Console.Clear();
-                }
-                catch (IOException)
-                {
-                }
+                WaitAndClearConsole();
             } while (!_game.IsEnded);
 
             Console.WriteLine("Thank you for playing!");
@@ -62,6 +55,18 @@ namespace Battleships
             {
                 Console.WriteLine("The entered location has been previously shot!");
             }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private static void WaitAndClearConsole()
+        {
+            if (Console.IsOutputRedirected)
+            {
+                return;
+            }
+
+            Thread.Sleep(1000);
+            Console.Clear();
         }
     }
 }
