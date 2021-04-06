@@ -16,10 +16,7 @@ namespace Battleships
             StartGame();
         }
 
-        /// <summary>
-        ///     Start the game.
-        /// </summary>
-        public static void StartGame()
+        private static void StartGame()
         {
             _game = new Game();
             do
