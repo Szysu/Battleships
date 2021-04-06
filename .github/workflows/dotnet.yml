@@ -1,0 +1,48 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      uses: dodopizza/dotcover-action@v1
+      with:
+        dotCoverCommand: dotnet --ReportType=DetailedXML --Output="TestResults.xml" -- test
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: TestResults
+        path: TestResults.xml
+      if: ${{ always() }}
+  
+  report_test_coverage:
+    name: Send test results to Codacy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: TestResults
+      - name: Send test results to Codacy
+        uses: codacy/codacy-coverage-reporter-action@0.2.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: TestResults.xml
