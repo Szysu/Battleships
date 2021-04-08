@@ -1,68 +1,59 @@
 ﻿using System;
-using System.Threading;
+using Battleships.Logic;
 
 namespace Battleships
 {
     public static class Program
     {
-        public const int NumberOfBattleshipsToCreate = 1;
-        public const int NumberOfDestroyersToCreate = 2;
+        public const int PlaygroundSize = 10;
+        public const int BattleshipsToCreate = 1;
+        public const int DestroyersToCreate = 2;
+        public const int BattleshipSize = 5;
+        public const int DestroyerSize = 4;
 
-        private static Game _game;
+        private static ShipGenerator _shipGenerator;
 
-        /// <summary>
-        ///     The program input.
-        /// </summary>
         public static void Main(string[] args)
         {
-            StartGame();
+            _shipGenerator = new ShipGenerator(PlaygroundSize);
+            CreateBattleships();
+            CreateDestroyers();
+
+            var playground = new Playground(PlaygroundSize);
+            var game = new Game(playground, _shipGenerator.Ships);
+            var gameController = new GameController(game);
+
+            gameController.StartGame();
         }
 
-        private static void StartGame()
+        private static void CreateBattleships()
         {
-            _game = new Game(NumberOfBattleshipsToCreate, NumberOfDestroyersToCreate);
-            do
+            for (var i = 0; i < BattleshipsToCreate; i++)
             {
-                WriteShipsToDestroy();
-                Console.WriteLine(_game.ToString());
-                WriteShotLocationRequest();
-                WaitAndClearConsole();
-            } while (!_game.IsEnded);
-
-            Console.WriteLine("Thank you for playing!");
-        }
-
-        private static void WriteShipsToDestroy()
-        {
-            Console.WriteLine($"Battleships: {_game.BattleshipsToSink}");
-            Console.WriteLine($"Destroyers: {_game.DestroyersToSink}");
-        }
-
-        private static void WriteShotLocationRequest()
-        {
-            Console.Write("Location to shot: ");
-            var input = Console.ReadLine();
-
-            if (!Location.TryParse(input, out var location))
-            {
-                Console.WriteLine("The entered location is invalid.");
-                return;
-            }
-
-            try
-            {
-                Console.WriteLine($"The shot {(_game.Shoot(location) ? "hit" : "missed")}!");
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("The entered location has been previously shot!");
+                try
+                {
+                    _shipGenerator.CreateShip(BattleshipSize);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("The specified number of battleships could not be generated.");
+                }
             }
         }
 
-        private static void WaitAndClearConsole()
+        private static void CreateDestroyers()
         {
-            Thread.Sleep(1000);
-            Console.Clear();
+            for (var i = 0; i < DestroyersToCreate; i++)
+            {
+                try
+                {
+                    _shipGenerator.CreateShip(DestroyerSize);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("The specified number of destroyers could not be generated.");
+                }
+            }
         }
     }
 }

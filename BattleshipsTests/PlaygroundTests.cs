@@ -1,6 +1,6 @@
 ﻿namespace BattleshipsTests
 {
-    public class ProgramTests
+    public class PlaygroundTests
     {
     }
 }
