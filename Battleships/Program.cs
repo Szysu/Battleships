@@ -16,8 +16,8 @@ namespace Battleships
         public static void Main(string[] args)
         {
             _shipGenerator = new ShipGenerator(PlaygroundSize);
-            CreateBattleships();
-            CreateDestroyers();
+            CreateBattleships(BattleshipsToCreate);
+            CreateDestroyers(DestroyersToCreate);
 
             var playground = new Playground(PlaygroundSize);
             var game = new Game(playground, _shipGenerator.Ships);
@@ -26,9 +26,14 @@ namespace Battleships
             gameController.StartGame();
         }
 
-        private static void CreateBattleships()
+        public static void CreateBattleships(int battleshipsToCreate)
         {
-            for (var i = 0; i < BattleshipsToCreate; i++)
+            if (battleshipsToCreate < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            for (var i = 0; i < battleshipsToCreate; i++)
             {
                 try
                 {
@@ -41,9 +46,14 @@ namespace Battleships
             }
         }
 
-        private static void CreateDestroyers()
+        public static void CreateDestroyers(int destroyersToCreate)
         {
-            for (var i = 0; i < DestroyersToCreate; i++)
+            if (destroyersToCreate < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            for (var i = 0; i < destroyersToCreate; i++)
             {
                 try
                 {

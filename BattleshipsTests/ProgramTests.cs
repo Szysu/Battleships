@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Battleships;
+using FluentAssertions;
 using Xunit;
 
 namespace BattleshipsTests
@@ -12,7 +13,7 @@ namespace BattleshipsTests
         public void Main_CorrectlyRunsProgram()
         {
             // 'G11' and 'A1' added to check the detection of duplicate shots and invalid inputs.
-            var allLocations = string.Format("G11{0}A1{0}{1}", Environment.NewLine, GetAllLocations());
+            var allLocations = string.Format("G11{0}A1{0}Z{1}", Environment.NewLine, GetAllLocations());
 
             var output = new StringWriter();
             Console.SetOut(output);
@@ -25,6 +26,24 @@ namespace BattleshipsTests
             Assert.Contains("The entered location is invalid.", output.ToString());
             Assert.Contains("The entered location has been previously shot!", output.ToString());
             Assert.Contains("Thank you for playing!", output.ToString());
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        public void CreateBattleships_InvalidNumberOfBattleshipsToCreate_ThrowsArgumentOutOfRangeException(
+            int numberOfBattleships)
+        {
+            Action action = () => Program.CreateBattleships(numberOfBattleships);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        public void CreateDestroyers_InvalidNumberOfDestroyersToCreate_ThrowsArgumentOutOfRangeException(
+            int numberOfDestroyers)
+        {
+            Action action = () => Program.CreateDestroyers(numberOfDestroyers);
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         private string GetAllLocations()

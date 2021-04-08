@@ -5,6 +5,28 @@ namespace Battleships.Logic
 {
     public record Location
     {
+        public Location()
+        {
+        }
+
+        public Location(char alpha, int number)
+        {
+            alpha = char.Parse(alpha.ToString().ToUpper());
+
+            if (!char.IsLetter(alpha))
+            {
+                throw new ArgumentException(nameof(alpha));
+            }
+
+            if (number < 1)
+            {
+                throw new ArgumentException(nameof(number));
+            }
+
+            Alpha = alpha;
+            Number = number;
+        }
+
         public char Alpha { get; init; }
         public int Number { get; init; }
 

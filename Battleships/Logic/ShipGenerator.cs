@@ -11,6 +11,11 @@ namespace Battleships.Logic
 
         public ShipGenerator(int playgroundSize)
         {
+            if (playgroundSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(playgroundSize));
+            }
+
             _playgroundSize = playgroundSize;
             _usedLocations = new List<Location>();
             Ships = new List<IShip>();
@@ -20,6 +25,11 @@ namespace Battleships.Logic
 
         public void CreateShip(int shipSize)
         {
+            if (shipSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(shipSize));
+            }
+
             var possibleLocations = GetAllPossibleCombinations(shipSize);
 
             if (possibleLocations.Count < 1)

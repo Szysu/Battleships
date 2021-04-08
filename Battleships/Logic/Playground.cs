@@ -1,9 +1,16 @@
-﻿namespace Battleships.Logic
+﻿using System;
+
+namespace Battleships.Logic
 {
     public class Playground : IPlayground
     {
         public Playground(int size)
         {
+            if (size < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(size));
+            }
+
             Size = size;
         }
 
