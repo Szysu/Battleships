@@ -10,17 +10,20 @@ namespace Battleships
     /// </summary>
     public class Game
     {
+        private const int BattleshipSize = 5;
+        private const int DestroyerSize = 4;
+
         private readonly List<Location> _missedShotLocations;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Game"/> class.
         /// </summary>
-        public Game()
+        public Game(int battleshipsToCreate, int destroyersToCreate)
         {
             Ships = new List<Ship>();
             _missedShotLocations = new List<Location>();
-            CreateShips(5, 1);
-            CreateShips(4, 2);
+            CreateShips(BattleshipSize, destroyersToCreate);
+            CreateShips(DestroyerSize, battleshipsToCreate);
         }
 
         /// <summary>
@@ -44,29 +47,24 @@ namespace Battleships
         public bool IsEnded => Ships.All(s => s.IsSunk);
 
         /// <summary>
-        ///     Compares ships locations with the specified <paramref name="location"/>.
+        ///     Compares ships locations with the specified <paramref name="location"/> .
         /// </summary>
         /// <param name="location">A location to compare.</param>
-        /// <returns>
-        ///     <see langword="true"/> if the specified <paramref name="location"/> is a ship
-        ///     location, otherwise <see langword="false"/>.
-        /// </returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="location"/> was previously shot.
         /// </exception>
+        /// <returns>
+        ///     <see langword="true"/> if the specified <paramref name="location"/> is a ship
+        ///     location, otherwise <see langword="false"/> .
+        /// </returns>
         public bool Shoot(Location location)
         {
             if (_missedShotLocations.Contains(location))
-            {
                 throw new ArgumentException("Location was previously shot.", nameof(location));
-            }
 
             if (TryGetShipLocationCondition(location, out var ship, out var condition))
             {
-                if (condition)
-                {
-                    throw new ArgumentException("Location was previously shot.", nameof(location));
-                }
+                if (condition) throw new ArgumentException("Location was previously shot.", nameof(location));
 
                 ship.Locations[location] = true;
                 return true;
@@ -77,7 +75,7 @@ namespace Battleships
         }
 
         /// <summary>
-        ///     Returns a symbol representation of the specified <paramref name="location"/>.
+        ///     Returns a symbol representation of the specified <paramref name="location"/> .
         /// </summary>
         /// <param name="location">The location of the symbol.</param>
         /// <returns>The symbol of the location.</returns>
@@ -85,15 +83,9 @@ namespace Battleships
         {
             var symbol = '#';
 
-            if (_missedShotLocations.Contains(location))
-            {
-                symbol = 'O';
-            }
+            if (_missedShotLocations.Contains(location)) symbol = 'O';
 
-            if (TryGetShipLocationCondition(location, out _, out var condition) && condition)
-            {
-                symbol = 'X';
-            }
+            if (TryGetShipLocationCondition(location, out _, out var condition) && condition) symbol = 'X';
 
             return symbol;
         }
@@ -146,10 +138,7 @@ namespace Battleships
 
             foreach (var s in Ships)
             {
-                if (!s.Locations.TryGetValue(location, out var value))
-                {
-                    continue;
-                }
+                if (!s.Locations.TryGetValue(location, out var value)) continue;
 
                 ship = s;
                 condition = value;
@@ -165,13 +154,11 @@ namespace Battleships
             var firstLocation = isVertical ? Location.Random(size, 0) : Location.Random(0, size);
 
             for (var i = 0; i < size; i++)
-            {
                 locations.Add(
-                    isVertical ?
-                        new Location((char)(firstLocation.Char + i), firstLocation.Number) :
-                        new Location(firstLocation.Char, firstLocation.Number + i)
+                    isVertical
+                        ? new Location((char)(firstLocation.Char + i), firstLocation.Number)
+                        : new Location(firstLocation.Char, firstLocation.Number + i)
                 );
-            }
 
             return locations;
         }

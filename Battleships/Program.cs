@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Battleships
 {
     public static class Program
     {
+        public const int NumberOfBattleshipsToCreate = 1;
+        public const int NumberOfDestroyersToCreate = 2;
+
         private static Game _game;
 
         /// <summary>
@@ -18,7 +20,7 @@ namespace Battleships
 
         private static void StartGame()
         {
-            _game = new Game();
+            _game = new Game(NumberOfBattleshipsToCreate, NumberOfDestroyersToCreate);
             do
             {
                 WriteShipsToDestroy();
@@ -57,14 +59,8 @@ namespace Battleships
             }
         }
 
-        [ExcludeFromCodeCoverage]
         private static void WaitAndClearConsole()
         {
-            if (Console.IsOutputRedirected)
-            {
-                return;
-            }
-
             Thread.Sleep(1000);
             Console.Clear();
         }

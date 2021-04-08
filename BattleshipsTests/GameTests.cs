@@ -12,7 +12,7 @@ namespace BattleshipsTests
 
         public GameTests()
         {
-            _game = new Game();
+            _game = new Game(Program.NumberOfBattleshipsToCreate, Program.NumberOfDestroyersToCreate);
         }
 
         [Fact]
