@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Battleships.Logic
@@ -11,7 +12,7 @@ namespace Battleships.Logic
 
         public Location(char alpha, int number)
         {
-            alpha = char.Parse(alpha.ToString().ToUpper());
+            alpha = char.Parse(alpha.ToString().ToUpper(CultureInfo.InvariantCulture));
 
             if (!char.IsLetter(alpha))
             {
@@ -32,7 +33,7 @@ namespace Battleships.Logic
 
         public static Location Parse(string s)
         {
-            s = s.ToUpper();
+            s = s.ToUpper(CultureInfo.InvariantCulture);
 
             var regex = new Regex(@"([A-Z])(\d+)");
             var result = regex.Match(s);

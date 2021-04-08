@@ -5,11 +5,11 @@ namespace Battleships
 {
     public static class Program
     {
-        public const int PlaygroundSize = 10;
-        public const int BattleshipsToCreate = 1;
-        public const int DestroyersToCreate = 2;
-        public const int BattleshipSize = 5;
-        public const int DestroyerSize = 4;
+        public static readonly int PlaygroundSize = 10;
+        public static readonly int BattleshipsToCreate = 1;
+        public static readonly int DestroyersToCreate = 2;
+        public static readonly int BattleshipSize = 5;
+        public static readonly int DestroyerSize = 4;
 
         private static ShipGenerator _shipGenerator;
 
