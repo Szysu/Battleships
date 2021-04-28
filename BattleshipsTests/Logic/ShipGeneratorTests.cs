@@ -1,18 +1,15 @@
 ﻿using System;
 using Battleships.Logic;
-using FluentAssertions;
 using Xunit;
 
-namespace BattleshipsTests
+namespace BattleshipsTests.Logic
 {
     public class ShipGeneratorTests
     {
         [Fact]
         public void Constructor_InvalidValue_ThrowsArgumentOutOfException()
         {
-            Action action = () => new ShipGenerator(0);
-
-            action.Should().Throw<ArgumentOutOfRangeException>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => { new ShipGenerator(0); });
         }
 
         [Fact]
@@ -25,7 +22,7 @@ namespace BattleshipsTests
         public void CreateShip_InvalidValue_ThrowsArgumentOutOfRangeException()
         {
             var shipGenerator = new ShipGenerator(10);
-            shipGenerator.Invoking(sg => sg.CreateShip(0)).Should().Throw<ArgumentOutOfRangeException>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => { shipGenerator.CreateShip(0); });
         }
 
         [Fact]
@@ -40,7 +37,7 @@ namespace BattleshipsTests
         {
             var shipGenerator = new ShipGenerator(2);
 
-            shipGenerator.Invoking(s => s.CreateShip(3)).Should().Throw<ArgumentOutOfRangeException>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => { shipGenerator.CreateShip(3); });
         }
     }
 }

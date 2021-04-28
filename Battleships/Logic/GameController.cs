@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Battleships.Logic;
 
-namespace Battleships
+namespace Battleships.Logic
 {
     public class GameController : IGameController
     {

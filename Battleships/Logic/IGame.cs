@@ -4,7 +4,7 @@ namespace Battleships.Logic
 {
     public interface IGame
     {
-        IList<IShip> Ships { get; }
+        IList<Ship> Ships { get; }
         List<Location> Shots { get; }
         IPlayground Playground { get; }
         bool IsEnded { get; }

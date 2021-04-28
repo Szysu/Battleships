@@ -1,17 +1,15 @@
 ﻿using System;
 using Battleships.Logic;
-using FluentAssertions;
 using Xunit;
 
-namespace BattleshipsTests
+namespace BattleshipsTests.Logic
 {
     public class PlaygroundTests
     {
         [Fact]
         public void Constructor_InvalidValue_ThrowsArgumentOutOfRangeException()
         {
-            Action action = () => new Playground(0);
-            action.Should().Throw<ArgumentOutOfRangeException>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => { new Playground(0); });
         }
 
         [Fact]
@@ -30,7 +28,7 @@ namespace BattleshipsTests
                 Number = 1
             };
             var result = playground.IsValidLocation(location);
-            result.Should().BeTrue();
+            Assert.True(result);
         }
 
         [Fact]
@@ -43,14 +41,15 @@ namespace BattleshipsTests
                 Number = 100
             };
             var result = playground.IsValidLocation(location);
-            result.Should().BeFalse();
+            Assert.False(result);
         }
 
         [Fact]
         public void IsValidLocation_DefaultLocation_ReturnsFalse()
         {
             var playground = new Playground(10);
-            playground.IsValidLocation(default);
+            var result = playground.IsValidLocation(default);
+            Assert.False(result);
         }
     }
 }

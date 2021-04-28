@@ -6,14 +6,14 @@ namespace Battleships.Logic
 {
     public class Game : IGame
     {
-        public Game(IPlayground playground, IList<IShip> ships)
+        public Game(IPlayground playground, IList<Ship> ships)
         {
             Playground = playground;
             Ships = ships;
             Shots = new List<Location>();
         }
 
-        public IList<IShip> Ships { get; }
+        public IList<Ship> Ships { get; }
         public List<Location> Shots { get; }
         public IPlayground Playground { get; }
         public bool IsEnded => Ships.All(s => s.IsSunk);

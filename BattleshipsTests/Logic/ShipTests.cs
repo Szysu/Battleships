@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Battleships.Logic;
-using FluentAssertions;
 using Xunit;
 
-namespace BattleshipsTests
+namespace BattleshipsTests.Logic
 {
     public class ShipTests
     {
@@ -17,8 +16,7 @@ namespace BattleshipsTests
             {
                 Locations = locations
             };
-
-            ship.IsSunk.Should().BeFalse();
+            Assert.False(ship.IsSunk);
         }
 
         [Fact]
@@ -32,7 +30,7 @@ namespace BattleshipsTests
                 Locations = locations
             };
 
-            ship.IsSunk.Should().BeTrue();
+            Assert.True(ship.IsSunk);
         }
     }
 }

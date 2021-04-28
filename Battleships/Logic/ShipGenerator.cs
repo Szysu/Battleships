@@ -18,10 +18,10 @@ namespace Battleships.Logic
 
             _playgroundSize = playgroundSize;
             _usedLocations = new List<Location>();
-            Ships = new List<IShip>();
+            Ships = new List<Ship>();
         }
 
-        public List<IShip> Ships { get; }
+        public List<Ship> Ships { get; }
 
         public void CreateShip(int shipSize)
         {

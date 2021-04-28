@@ -4,7 +4,7 @@ namespace Battleships.Logic
 {
     public interface IShipGenerator
     {
-        public List<IShip> Ships { get; }
+        public List<Ship> Ships { get; }
         public void CreateShip(int shipSize);
     }
 }

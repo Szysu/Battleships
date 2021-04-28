@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Battleships.Logic
 {
-    public class Ship : IShip
+    public class Ship
     {
         public bool IsSunk => Locations.All(loc => loc.Value);
 
