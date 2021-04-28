@@ -6,7 +6,7 @@ using Battleships.Logic;
 
 namespace Battleships
 {
-    public class GameController
+    public class GameController : IGameController
     {
         private readonly IGame _game;
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Battleships.Logic
 {
-    public class ShipGenerator
+    public class ShipGenerator : IShipGenerator
     {
         private readonly int _playgroundSize;
         private readonly List<Location> _usedLocations;
@@ -77,13 +77,13 @@ namespace Battleships.Logic
                     {
                         var verticalLocation = new Location
                         {
-                            Alpha = (char)(65 + i),
+                            Alpha = (char) (65 + i),
                             Number = j + k
                         };
 
                         var horizontalLocation = new Location
                         {
-                            Alpha = (char)(65 + i + k),
+                            Alpha = (char) (65 + i + k),
                             Number = j
                         };
 
@@ -103,8 +103,8 @@ namespace Battleships.Logic
         private void RemoveLocationsUsedBefore(ref List<List<Location>> locations)
         {
             foreach (var list in from list in locations.ToArray()
-                                 from usedLocation in _usedLocations.Where(list.Contains)
-                                 select list)
+                from usedLocation in _usedLocations.Where(list.Contains)
+                select list)
             {
                 locations.Remove(list);
             }

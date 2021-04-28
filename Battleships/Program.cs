@@ -3,7 +3,7 @@ using Battleships.Logic;
 
 namespace Battleships
 {
-    public static class Program
+    public class Program
     {
         public static readonly int PlaygroundSize = 10;
         public static readonly int BattleshipsToCreate = 1;
@@ -11,26 +11,40 @@ namespace Battleships
         public static readonly int BattleshipSize = 5;
         public static readonly int DestroyerSize = 4;
 
-        private static ShipGenerator _shipGenerator;
+        private readonly IGameController _gameController;
+        private readonly IShipGenerator _shipGenerator;
 
-        public static void Main(string[] args)
+        public Program(IGameController gameController, IShipGenerator shipGenerator)
         {
-            _shipGenerator = new ShipGenerator(PlaygroundSize);
+            _gameController = gameController;
+            _shipGenerator = shipGenerator;
+        }
+
+        public void StartGame()
+        {
             CreateBattleships(BattleshipsToCreate);
             CreateDestroyers(DestroyersToCreate);
 
-            var playground = new Playground(PlaygroundSize);
-            var game = new Game(playground, _shipGenerator.Ships);
-            var gameController = new GameController(game);
-
-            gameController.StartGame();
+            _gameController.StartGame();
         }
 
-        public static void CreateBattleships(int battleshipsToCreate)
+        public static void Main(string[] args)
+        {
+            var shipGenerator = new ShipGenerator(PlaygroundSize);
+            var playground = new Playground(PlaygroundSize);
+
+            var game = new Game(playground, shipGenerator.Ships);
+            var gameController = new GameController(game);
+
+            var program = new Program(gameController, shipGenerator);
+            program.StartGame();
+        }
+
+        private void CreateBattleships(int battleshipsToCreate)
         {
             if (battleshipsToCreate < 0)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(battleshipsToCreate));
             }
 
             for (var i = 0; i < battleshipsToCreate; i++)
@@ -46,11 +60,11 @@ namespace Battleships
             }
         }
 
-        public static void CreateDestroyers(int destroyersToCreate)
+        private void CreateDestroyers(int destroyersToCreate)
         {
             if (destroyersToCreate < 0)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(destroyersToCreate));
             }
 
             for (var i = 0; i < destroyersToCreate; i++)
